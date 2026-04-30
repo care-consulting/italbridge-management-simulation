@@ -1481,6 +1481,46 @@ h3 {
   margin-top: 28px;
 }
 
+.facilitator-guide-panel h1 {
+  margin-bottom: 6px;
+}
+
+.facilitator-guide-actions {
+  justify-content: flex-end;
+}
+
+.facilitator-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.facilitator-section {
+  margin-top: 20px;
+}
+
+.facilitator-table th,
+.facilitator-table td {
+  vertical-align: top;
+}
+
+@media print {
+  .quick-nav,
+  .facilitator-guide-actions {
+    display: none !important;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  .page-shell {
+    width: 100%;
+    padding: 0;
+  }
+}
+
 .final-team-switcher {
   margin: 18px 0 22px;
 }
