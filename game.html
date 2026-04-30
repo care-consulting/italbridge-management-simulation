@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ItalBridge Transport Business Game</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <nav class="quick-nav">
+        <a href="./settings.html">Mandati</a>
+        <a href="#workshop-panel">Regia</a>
+        <a href="#team-panel">Squadre</a>
+        <a href="#decision-panel">Decisioni</a>
+        <a href="#round-event-panel">Evento</a>
+        <a href="#outcome-panel">Esito</a>
+        <a href="#comparison-panel">Confronto</a>
+      </nav>
+      <header class="hero">
+        <div class="hero-copy">
+          <div class="brand-row">
+            <p class="eyebrow">ItalBridge Transport</p>
+            <span class="brand-mark">Management Simulation</span>
+          </div>
+          <h1>Simulazione Direzionale: un anno di scelte in trasporti e logistica</h1>
+          <p class="hero-text">
+            I direttori entrano nella cabina di regia di ItalBridge Transport e affrontano
+            un anno di decisioni su clienti, marginalità, cassa, servizio e
+            pressioni del contesto. Ogni round traduce una parte di questo anno
+            in scelte concrete e conseguenze cumulative.
+          </p>
+          <div class="hero-tags">
+            <span>13 direttori</span>
+            <span>3 round</span>
+            <span>60 minuti</span>
+            <span>Scenari dinamici</span>
+            <span>1 anno simulato</span>
+          </div>
+          <div class="action-row hero-actions">
+            <button id="load-final-demo-button" class="secondary-button" type="button">
+              Carica demo finale
+            </button>
+            <button id="load-final-demo-alt-button" class="secondary-button" type="button">
+              Carica demo finale 2
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro-stack">
+          <article class="panel" id="simulation-reading-panel">
+            <div class="label-row">
+              <p class="panel-label">Come leggere la simulazione</p>
+            </div>
+            <h2>Come si sviluppa l'anno simulato</h2>
+            <div class="logic-cards">
+              <div class="logic-card">
+                <span class="logic-index">01</span>
+                <p>Tutte le squadre partono dallo stesso scenario iniziale, con gli stessi numeri e lo stesso contesto competitivo.</p>
+              </div>
+              <div class="logic-card">
+                <span class="logic-index">02</span>
+                <p>Ogni round rappresenta una fase dell'anno e chiede una scelta strategica, una scelta operativa e una decisione sul coinvolgimento interno.</p>
+              </div>
+              <div class="logic-card">
+                <span class="logic-index">03</span>
+                <p>Durante il percorso possono entrare eventi straordinari interni o esterni che modificano priorità, tempi e qualità della risposta manageriale.</p>
+              </div>
+              <div class="logic-card">
+                <span class="logic-index">04</span>
+                <p>Alla fine di ogni round il sistema aggiorna KPI, prezzo pagato e rischi aperti, così da mostrare come evolve la traiettoria di ciascuna squadra.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel" id="scenario-intro-panel">
+            <div class="label-row">
+              <p class="panel-label">Scenario comune iniziale</p>
+            </div>
+            <h2>ItalBridge Transport | Operatore integrato di trasporti e logistica sotto pressione</h2>
+            <div class="scenario-columns">
+              <div>
+                <h3>Azienda e quadro interno</h3>
+                <ul class="signal-list">
+                  <li>ItalBridge Transport opera su spedizioni, trasporto e logistica integrata per clienti industriali e commerciali</li>
+                  <li>Ricavi iniziali: 123 M€</li>
+                  <li>EBITDA % iniziale: 3,0% | Cash Flow operativo: 4,3 M€ | PFN: 27,0 M€</li>
+                  <li>DSO: 90 giorni | Qualità del Servizio: 92% | Tempo Strategico disponibile: 100/100</li>
+                  <li>La capacità operativa è vicina al limite: saturazione al 91% e piccoli scostamenti si riflettono rapidamente sul servizio</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Mercato, clienti e governance</h3>
+                <ul class="signal-list">
+                  <li>Il mercato resta competitivo, con prezzi tesi, costi esterni instabili e clienti che chiedono flessibilità</li>
+                  <li>Concentrazione clienti: 35% del business su pochi account rilevanti</li>
+                  <li>Fragilità operativa iniziale: 68/100, segnale di una struttura già tesa e più esposta a eccezioni, urgenze e perdita di controllo</li>
+                  <li>Il game simula un anno di decisioni in 3 round: ogni squadra deve trovare un equilibrio credibile tra crescita, cassa, servizio, tempo strategico e tenuta organizzativa</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel process-panel">
+          <div class="label-row">
+            <p class="panel-label">Come si gioca</p>
+          </div>
+          <div class="process-steps">
+            <div class="process-step">
+              <span class="process-index">1</span>
+              <div>
+                <h3>Leggi il punto di partenza</h3>
+                <p>Osserva scenario iniziale, KPI e vincoli prima di entrare nelle decisioni del round.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <span class="process-index">2</span>
+              <div>
+                <h3>Prendi le decisioni</h3>
+                <p>Lavora nei blocchi <strong>Scelta strategica del round</strong> e <strong>Gestione operativa</strong>.</p>
+              </div>
+            </div>
+            <div class="process-step">
+              <span class="process-index">3</span>
+              <div>
+                <h3>Leggi i risultati</h3>
+                <p>Controlla <strong>Scenario aggiornato</strong> e <strong>Quadro comparativo</strong> per vedere gli effetti.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel workshop-panel" id="workshop-panel">
+          <div class="section-head">
+            <div>
+              <p class="panel-label">Regia workshop</p>
+              <h2>Avanzamento squadre e round</h2>
+            </div>
+            <p class="comparison-copy" id="workshop-summary">
+              Il facilitatore inserisce una squadra alla volta e il sistema aggiorna lo stato del percorso.
+            </p>
+          </div>
+          <div class="workshop-grid">
+            <div class="workshop-card">
+              <p class="mini-label">Round di plenaria</p>
+              <p class="workshop-main" id="plenary-round">Round 1 in corso</p>
+              <p class="workshop-copy" id="plenary-round-copy"></p>
+            </div>
+            <div class="workshop-card">
+              <p class="mini-label">Squadra attiva</p>
+              <p class="workshop-main" id="active-team-workshop">Squadra A</p>
+              <p class="workshop-copy" id="active-team-workshop-copy"></p>
+            </div>
+          </div>
+          <div class="round-progress-grid" id="round-progress-grid"></div>
+        </section>
+
+        <section class="panel" id="team-panel">
+          <div class="section-head">
+            <div>
+              <div class="label-row">
+                <p class="panel-label">Squadre</p>
+              </div>
+              <h2>Stesso punto di partenza, evoluzioni diverse</h2>
+            </div>
+            <div class="team-selector" id="team-selector"></div>
+          </div>
+
+          <div class="team-meta-row">
+            <div class="team-objective-card">
+              <p class="mini-label">Obiettivo annuale</p>
+              <p class="team-objective-title" id="team-objective-title"></p>
+              <p class="team-objective-copy" id="team-objective-copy"></p>
+            </div>
+            <div class="team-round-card">
+              <p class="mini-label">Stato del percorso</p>
+              <p class="team-round-title" id="team-round-title"></p>
+              <p class="team-round-copy" id="team-round-copy"></p>
+            </div>
+          </div>
+
+          <div class="team-note">
+            <strong id="team-name">Squadra A</strong>
+            <span id="team-note"></span>
+          </div>
+
+          <div class="kpi-grid" id="kpi-grid"></div>
+        </section>
+
+        <section class="panel round-title-panel">
+          <p class="panel-label">Round attivo</p>
+          <h2 id="round-main-title">ROUND 1</h2>
+        </section>
+
+        <section class="simulation-layout" id="decision-panel">
+          <article class="panel">
+            <div class="label-row">
+              <p class="panel-label">Scelta strategica</p>
+            </div>
+            <h2 id="strategy-panel-title">Scelta strategica</h2>
+            <div class="option-list" id="strategy-options"></div>
+          </article>
+
+          <article class="panel">
+            <div class="label-row">
+              <p class="panel-label">Gestione operativa</p>
+            </div>
+            <h2 id="operational-panel-title">Scelta operativa</h2>
+            <div class="option-list compact" id="noise-options"></div>
+          </article>
+        </section>
+
+        <section class="panel involvement-panel">
+          <div class="toggle-card">
+            <div class="label-row">
+              <p class="toggle-label">Coinvolgimento interno del management</p>
+            </div>
+
+            <div class="involvement-grid">
+              <div class="involvement-scenario">
+                <p class="involvement-kicker" id="involvement-kicker">Situazione del round</p>
+                <p class="toggle-copy" id="involvement-copy">
+                  Prima di chiudere il round, la squadra deve decidere se portare il tema anche alle altre funzioni coinvolte oppure no.
+                </p>
+                <p class="involvement-question" id="involvement-question">
+                  Serve coinvolgere anche Operations, Commerciale e Finanza prima di confermare la decisione?
+                </p>
+              </div>
+
+              <div class="involvement-selector">
+                <input type="checkbox" id="share-info" checked hidden />
+                <button
+                  id="share-mode-off"
+                  class="mode-card"
+                  type="button"
+                  aria-pressed="false"
+                >
+                  <span class="mode-title">Coinvolgimento selettivo</span>
+                  <span class="mode-copy">La decisione resta nel nucleo ristretto del team di direzione e viene chiusa rapidamente.</span>
+                </button>
+                <button
+                  id="share-mode-on"
+                  class="mode-card active"
+                  type="button"
+                  aria-pressed="true"
+                >
+                  <span class="mode-title">Coinvolgimento ampio</span>
+                  <span class="mode-copy">La decisione viene condivisa anche con le funzioni coinvolte prima della chiusura finale.</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="toggle-footnote" id="share-footnote">
+            Il confronto viene allargato prima di chiudere la decisione del round.
+          </p>
+        </section>
+
+        <section class="panel round-event-panel" id="round-event-panel">
+          <div class="label-row">
+            <p class="panel-label">Evento straordinario</p>
+          </div>
+          <h2 id="round-event-title">Evento del round</h2>
+          <p class="comparison-copy" id="round-event-intro">
+            L'evento straordinario compare solo durante il round, dopo la discussione sulle decisioni base.
+          </p>
+          <div class="action-row reveal-row">
+            <button id="reveal-event-button" class="primary-button">
+              Attiva evento del round
+            </button>
+          </div>
+          <div id="extra-events-container"></div>
+        </section>
+
+        <section class="panel round-submit-panel">
+          <div class="label-row">
+            <p class="panel-label">Chiusura round squadra</p>
+          </div>
+          <h2 id="submit-title">Conferma e chiudi il round della squadra</h2>
+          <p class="comparison-copy" id="submit-copy">
+            Dopo aver inserito tutte le scelte, il facilitatore conferma il round e il sistema aggiorna stato, KPI e valutazione della squadra.
+          </p>
+          <div class="action-row">
+            <button id="simulate-button" class="primary-button">
+              Chiudi round squadra
+            </button>
+            <button id="reset-button" class="secondary-button">
+              Ripristina squadra
+            </button>
+          </div>
+        </section>
+
+        <section class="grid-two">
+          <article class="panel outcome-panel" id="outcome-panel">
+            <div class="label-row">
+              <p class="panel-label">Output del round</p>
+            </div>
+            <h2>Scenario aggiornato</h2>
+            <div class="outcome-badges" id="outcome-badges"></div>
+            <p class="narrative" id="scenario-text"></p>
+            <div class="insight-grid">
+              <div>
+                <p class="mini-label">Cosa è successo</p>
+                <p id="direct-impact"></p>
+              </div>
+              <div>
+                <p class="mini-label">Cosa resta aperto</p>
+                <p id="emerging-risk"></p>
+              </div>
+              <div>
+                <p class="mini-label">Tempo strategico residuo</p>
+                <p id="time-left"></p>
+              </div>
+              <div>
+                <p class="mini-label">Lettura del round</p>
+                <p id="managerial-reading"></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="label-row">
+              <p class="panel-label">Centro di simulazione</p>
+            </div>
+            <h2>Regole di evoluzione del gioco</h2>
+            <div class="guardrail-stack">
+              <div class="guardrail-card">
+                <h3>Stato della squadra</h3>
+                <p>
+                  Ogni round aggiorna KPI, priorità e livello di rischio della
+                  squadra selezionata.
+                </p>
+              </div>
+              <div class="guardrail-card">
+                <h3>Vincoli di contesto</h3>
+                <p>
+                  Le opzioni restano coerenti con il business di trasporti e
+                  logistica, con il perimetro economico e con il mercato.
+                </p>
+              </div>
+              <div class="guardrail-card accent">
+                <h3>Scenario successivo</h3>
+                <p>
+                  Il round successivo eredita conseguenze, vulnerabilità e
+                  opportunità generate dalle scelte già effettuate.
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="comparison-panel">
+          <div class="section-head">
+            <div>
+              <div class="label-row">
+                <p class="panel-label">Quadro comparativo</p>
+              </div>
+              <h2>Come divergono le squadre</h2>
+            </div>
+            <p class="comparison-copy" id="comparison-summary">
+              La stessa base economica può produrre esiti differenti in funzione
+              di strategia, qualità del presidio manageriale e circolazione delle informazioni.
+            </p>
+          </div>
+          <div class="action-row comparison-actions">
+            <button id="back-to-teams-button" class="secondary-button" type="button">
+              Torna a scelta squadra
+            </button>
+          </div>
+          <div class="comparison-table-wrap">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Squadra</th>
+                  <th>Scelte del round</th>
+                  <th>Tempo strategico</th>
+                  <th>EBITDA %</th>
+                  <th>Cash Flow</th>
+                  <th>Servizio</th>
+                  <th>Giudizio</th>
+                </tr>
+              </thead>
+              <tbody id="comparison-body"></tbody>
+            </table>
+          </div>
+          <div class="comparison-choice-grid" id="comparison-choice-grid"></div>
+        </section>
+
+        <section class="panel final-panel" id="final-panel" hidden>
+          <div class="label-row">
+            <p class="panel-label">Scheda finale squadra</p>
+          </div>
+          <h2 id="final-title">Esito finale della squadra</h2>
+          <div class="team-selector final-team-switcher" id="final-team-selector"></div>
+          <div class="final-summary-grid">
+            <div class="final-summary-card">
+              <p class="mini-label">Esito obiettivo</p>
+              <p class="final-summary-main" id="final-objective-outcome"></p>
+              <p class="final-summary-copy" id="final-objective-reason"></p>
+            </div>
+            <div class="final-summary-card">
+              <p class="mini-label">Profilo finale</p>
+              <p class="final-summary-main" id="final-profile"></p>
+              <p class="final-summary-copy" id="final-profile-reason"></p>
+            </div>
+          </div>
+          <div class="final-kpi-grid" id="final-kpi-grid"></div>
+          <div class="final-narrative-block">
+            <p class="mini-label">Lettura finale del percorso</p>
+            <p class="comparison-copy" id="final-narrative-copy"></p>
+          </div>
+          <div class="final-narrative-block">
+            <p class="mini-label">Scelta più robusta nel contesto</p>
+            <p class="comparison-copy" id="final-robustness-copy"></p>
+            <div class="action-row comparison-actions">
+              <button id="final-details-toggle" class="secondary-button" type="button">
+                Vedi dettaglio scelte e commenti
+              </button>
+            </div>
+            <div class="comparison-choice-grid" id="final-details-grid" hidden></div>
+          </div>
+          <div class="final-pill-grid" id="final-price-paid"></div>
+          <div class="final-pill-grid" id="final-capabilities"></div>
+          <div class="action-row final-debrief-entry">
+            <button id="open-debrief-button" class="primary-button" type="button">
+              Apri debrief finale
+            </button>
+          </div>
+        </section>
+
+        <section class="panel final-panel" id="all-teams-panel" hidden>
+          <div class="label-row">
+            <p class="panel-label">Chiusura workshop</p>
+          </div>
+          <h2>Debrief finale | confronto tra esiti, costi pagati e traiettorie future</h2>
+          <p class="comparison-copy" id="all-teams-summary"></p>
+          <div class="debrief-layout">
+            <aside class="panel debrief-questions" id="all-teams-questions">
+              <div class="label-row">
+                <p class="panel-label">Domande guida</p>
+              </div>
+              <h3>Chiavi di lettura del debrief</h3>
+              <ul class="debrief-question-list">
+                <li>Chi ha centrato il proprio obiettivo con il prezzo più alto?</li>
+                <li>Chi ha protetto meglio il sistema nel suo insieme?</li>
+                <li>Chi appare più forte oggi ma più fragile domani?</li>
+                <li>Quale squadra ha costruito la traiettoria più robusta per l'anno successivo?</li>
+              </ul>
+            </aside>
+            <div class="debrief-main">
+              <div class="action-row comparison-actions">
+                <div class="team-selector final-team-switcher" id="debrief-team-selector"></div>
+                <button id="debrief-end-button" class="primary-button" type="button">
+                  Fine dei giochi
+                </button>
+              </div>
+              <div class="action-row debrief-nav-row">
+                <button id="debrief-prev-button" class="secondary-button" type="button">← Sezione precedente</button>
+                <p class="mini-label" id="debrief-step-label">Sezione 1 di 3</p>
+                <button id="debrief-next-button" class="secondary-button" type="button">Sezione successiva →</button>
+              </div>
+              <div class="final-pill-grid" id="all-teams-highlights"></div>
+              <div class="comparison-table-wrap debrief-table-wrap">
+                <table class="comparison-table debrief-table" id="all-teams-debrief-table"></table>
+              </div>
+              <div class="comparison-choice-grid" id="all-teams-final-grid"></div>
+              <div class="action-row debrief-epilogue-row" id="debrief-epilogue-row" hidden>
+                <a class="primary-button epilogue-link-button" id="debrief-epilogue-link" href="./epilogo.html">Apri il saluto finale</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="character-overlay" id="character-overlay" hidden>
+      <div class="character-overlay-backdrop" id="character-overlay-close"></div>
+      <div class="character-overlay-panel">
+        <button class="character-overlay-dismiss" id="character-overlay-dismiss" type="button">×</button>
+        <div class="character-overlay-grid">
+          <div class="character-overlay-figure">
+            <img id="character-overlay-image" class="character-overlay-image" alt="" />
+          </div>
+          <div class="character-overlay-content">
+            <p class="mini-label" id="character-overlay-kicker"></p>
+            <h2 id="character-overlay-title"></h2>
+            <p class="comparison-copy" id="character-overlay-copy"></p>
+            <div class="option-list compact" id="character-overlay-options"></div>
+            <div class="action-row" id="character-overlay-actions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

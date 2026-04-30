@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ItalBridge Transport | Impostazione mandati</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <nav class="quick-nav">
+        <a href="./settings.html">Mandati</a>
+        <a href="./game.html">Game</a>
+      </nav>
+
+      <header class="hero">
+        <div class="hero-copy">
+          <div class="brand-row">
+            <p class="eyebrow">ItalBridge Transport</p>
+            <span class="brand-mark">Facilitatore</span>
+          </div>
+          <h1>Impostazione riservata dei mandati</h1>
+          <p class="hero-text">
+            Qui il facilitatore assegna i mandati alle squadre. Una volta salvati, il game li legge in automatico e li mantiene nascosti fino al debrief finale.
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <div class="label-row">
+                <p class="panel-label">Setting riservato</p>
+              </div>
+              <h2>Mandati per squadra</h2>
+            </div>
+            <p class="comparison-copy">
+              I mandati possono anche coincidere tra squadre diverse. Nel game non saranno visibili: riemergeranno solo nel debrief finale.
+            </p>
+          </div>
+          <div class="team-note settings-status-note" style="margin-bottom:20px;">
+            <strong>Stato mandati</strong>
+            <span id="settings-saved-indicator">Non ancora salvati</span>
+          </div>
+          <div class="team-note settings-warning-note" id="settings-warning-note" style="margin-bottom:20px;" hidden>
+            <strong>Controllo</strong>
+            <span id="settings-warning-copy"></span>
+          </div>
+          <div class="comparison-choice-grid" id="settings-grid"></div>
+          <div class="action-row final-debrief-entry">
+            <button id="settings-save-button" class="primary-button" type="button">Salva mandati</button>
+            <button id="settings-save-open-button" class="primary-button" type="button">Salva e apri il game</button>
+            <button id="settings-clear-button" class="secondary-button" type="button">Azzera mandati</button>
+            <button id="settings-open-game-button" class="secondary-button" type="button">Apri il game</button>
+          </div>
+          <p class="comparison-copy" id="settings-status"></p>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const TEAMS = [
+        { id: "team-a", name: "Squadra A", note: "Osserva il profilo economico-finanziario e la tenuta della cassa." },
+        { id: "team-b", name: "Squadra B", note: "Osserva la forza commerciale dei clienti principali e le richieste del mercato." },
+        { id: "team-c", name: "Squadra C", note: "Osserva la rete operativa, la capacità residua e il livello di servizio." },
+        { id: "team-d", name: "Squadra D", note: "Osserva il bilanciamento tra priorità del business e pressioni di governance." },
+      ];
+
+      const OBJECTIVES = [
+        { id: "margin", name: "Difendere la marginalità" },
+        { id: "cash", name: "Proteggere la cassa" },
+        { id: "growth", name: "Sostenere la crescita" },
+        { id: "service", name: "Mettere in sicurezza servizio e struttura" },
+      ];
+
+      const STORAGE_KEY = "itlm-objectives";
+      const grid = document.getElementById("settings-grid");
+      const saveButton = document.getElementById("settings-save-button");
+      const saveOpenButton = document.getElementById("settings-save-open-button");
+      const clearButton = document.getElementById("settings-clear-button");
+      const openGameButton = document.getElementById("settings-open-game-button");
+      const status = document.getElementById("settings-status");
+      const indicator = document.getElementById("settings-saved-indicator");
+      const warningNote = document.getElementById("settings-warning-note");
+      const warningCopy = document.getElementById("settings-warning-copy");
+
+      function readSaved() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch {
+          return {};
+        }
+      }
+
+      function getCurrentSelections() {
+        const current = {};
+        document.querySelectorAll("[data-team]").forEach((select) => {
+          current[select.getAttribute("data-team")] = select.value || null;
+        });
+        return current;
+      }
+
+      function render(useCurrentSelections = false) {
+        const saved = readSaved();
+        const current = useCurrentSelections ? getCurrentSelections() : saved;
+        const allSaved = TEAMS.every((team) => Boolean(saved[team.id]));
+        indicator.textContent = allSaved ? "Mandati salvati" : "Non ancora salvati";
+        indicator.className = allSaved ? "settings-ok" : "settings-pending";
+        grid.innerHTML = TEAMS.map((team) => `
+          <div class="comparison-choice-card ${current[team.id] ? "settings-card-ok" : "settings-card-pending"}">
+            <p class="mini-label">${team.name}</p>
+            <p class="settings-check">${current[team.id] ? "✓ Mandato assegnato" : "✕ Mandato non assegnato"}</p>
+            <p><strong>${team.note}</strong></p>
+            <label class="mini-label" for="objective-${team.id}">Mandato riservato</label>
+            <select id="objective-${team.id}" data-team="${team.id}" class="objective-select">
+              <option value="">Seleziona un obiettivo</option>
+              ${OBJECTIVES.map((objective) => `<option value="${objective.id}" ${current[team.id] === objective.id ? "selected" : ""}>${objective.name}</option>`).join("")}
+            </select>
+          </div>
+        `).join("");
+
+        document.querySelectorAll("[data-team]").forEach((select) => {
+          select.addEventListener("change", () => {
+            const { allAssigned, missing } = collectPayload();
+            warningNote.hidden = allAssigned;
+            warningCopy.textContent = allAssigned
+              ? ""
+              : `Mancano i mandati per: ${missing.map((id) => TEAMS.find((team) => team.id === id)?.name).join(", ")}.`;
+            render(true);
+          });
+        });
+      }
+
+      function collectPayload() {
+        const payload = {};
+        let allAssigned = true;
+        const missing = [];
+        document.querySelectorAll("[data-team]").forEach((select) => {
+          if (!select.value) {
+            allAssigned = false;
+            missing.push(select.getAttribute("data-team"));
+          }
+          payload[select.getAttribute("data-team")] = select.value || null;
+        });
+        return { payload, allAssigned, missing };
+      }
+
+      saveButton.addEventListener("click", () => {
+        const { payload, allAssigned, missing } = collectPayload();
+
+        if (!allAssigned) {
+          status.textContent = "Assegna un mandato a tutte le squadre prima di salvare.";
+          warningNote.hidden = false;
+          warningCopy.textContent = `Mancano i mandati per: ${missing.map((id) => TEAMS.find((team) => team.id === id)?.name).join(", ")}.`;
+          return;
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        status.textContent = "Mandati salvati. Ora puoi aprire il game: resteranno nascosti fino al debrief finale.";
+        indicator.textContent = "Mandati salvati";
+        indicator.className = "settings-ok";
+        warningNote.hidden = true;
+        render();
+      });
+
+      saveOpenButton.addEventListener("click", () => {
+        const { payload, allAssigned, missing } = collectPayload();
+
+        if (!allAssigned) {
+          status.textContent = "Assegna un mandato a tutte le squadre prima di salvare.";
+          warningNote.hidden = false;
+          warningCopy.textContent = `Mancano i mandati per: ${missing.map((id) => TEAMS.find((team) => team.id === id)?.name).join(", ")}.`;
+          return;
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        indicator.textContent = "Mandati salvati";
+        indicator.className = "settings-ok";
+        warningNote.hidden = true;
+        window.location.href = "./game.html";
+      });
+
+      openGameButton.addEventListener("click", () => {
+        const saved = readSaved();
+        const allSaved = TEAMS.every((team) => Boolean(saved[team.id]));
+        if (!allSaved) {
+          const missing = TEAMS.filter((team) => !saved[team.id]).map((team) => team.name);
+          status.textContent = "Prima di aprire il game devi salvare tutti i mandati.";
+          warningNote.hidden = false;
+          warningCopy.textContent = `Mancano i mandati per: ${missing.join(", ")}.`;
+          return;
+        }
+
+        window.location.href = "./game.html";
+      });
+
+      clearButton.addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEY);
+        render();
+        status.textContent = "Mandati azzerati.";
+        indicator.className = "settings-pending";
+        warningNote.hidden = false;
+        warningCopy.textContent = "Tutti i mandati sono stati rimossi.";
+      });
+
+      render();
+    </script>
+  </body>
+</html>
