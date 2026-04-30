@@ -86,8 +86,7 @@ def add_round_sheet(doc, round_title):
         ("Coinvolgimento interno scelto", ""),
         ("Evento straordinario emerso", ""),
         ("Perché il team ha scelto questa linea", ""),
-        ("Quale costo o rischio si aspetta", ""),
-        ("Segnali da osservare a fine round", ""),
+        ("Quale prezzo siete disposti a pagare", ""),
     ]
     for left, right in prompts:
         row = table.add_row().cells
@@ -118,24 +117,22 @@ def build_participant_doc(path):
         ],
     )
 
-    doc.add_heading("Come usarla", level=1)
+    doc.add_heading("Uso rapido", level=1)
     for text in [
-        "Leggete lo scenario iniziale e annotate i vincoli che ritenete più rilevanti.",
-        "Per ogni round discutete prima il perché della scelta e solo dopo fissate l’opzione da comunicare al facilitatore.",
-        "Usate le righe sul costo atteso per esplicitare che cosa siete disposti a sacrificare.",
-        "Nel debrief finale confrontate il percorso fatto con il mandato della vostra squadra.",
+        "Annotate solo ciò che vi aiuta a chiarire la scelta.",
+        "Per ogni round fissate prima la priorità che volete proteggere.",
+        "Segnate il prezzo che siete disposti a pagare per quella linea.",
     ]:
         doc.add_paragraph(text, style="List Bullet")
 
     for round_name in ["Round 1", "Round 2", "Round 3"]:
         add_round_sheet(doc, round_name)
 
-    doc.add_heading("Domande utili per il debrief", level=1)
+    doc.add_heading("Debrief finale", level=1)
     for text in [
         "Che cosa abbiamo privilegiato davvero nel nostro percorso?",
         "Quale prezzo abbiamo pagato per proteggere quel risultato?",
-        "In quale momento il team ha perso o guadagnato robustezza?",
-        "Se l’anno continuasse, da quale punto forte o fragile ripartiremmo?",
+        "Da quale punto forte o fragile ripartiremmo se l’anno continuasse?",
     ]:
         doc.add_paragraph(text, style="List Bullet")
 
