@@ -1101,7 +1101,7 @@ function generateRoundComment(result) {
         : "Il rischio principale riguarda la sostenibilità del percorso scelto se il contesto diventerà più duro nel round successivo.";
 
   const reading = `${comment} ${kpiReading} ${result.involvementReading} Evento straordinario gestito: ${extraordinaryReading}. L'obiettivo annuale selezionato resta "${objective.name}".`;
-  const title = `Voce narrante | ${result.roundLabel}`;
+  const title = `Cela | ${result.roundLabel}`;
 
   return {
     title,
@@ -1331,7 +1331,7 @@ function renderOutcome() {
     directImpact.textContent = "Le variazioni KPI verranno lette dopo la simulazione del round.";
     emergingRisk.textContent = "Il rischio emergerà in base al mix di crescita, cassa, servizio, tempo strategico ed eventi straordinari.";
     timeLeft.textContent = `${state.visible.strategicTime.toFixed(0)} / 100`;
-    managerialReading.textContent = "La voce narrante commenta il round in modo statico, ma il motore è già strutturato per una futura sostituzione del commento con un layer AI.";
+    managerialReading.textContent = "Cela commenta il round in modo statico, ma il motore è già strutturato per una futura sostituzione del commento con un layer AI.";
     outcomeBadges.innerHTML = `<span>${round.label}</span><span>Stato squadra: ${state.status}</span>`;
     return;
   }
@@ -1369,8 +1369,8 @@ function renderCharacterOverlay() {
     const comment = generateRoundComment(result);
     overlayPanel?.classList.add("narrator-mode");
     characterOverlayImage.src = "./voce-narrante-clean.png";
-    characterOverlayImage.alt = "Voce narrante";
-    characterOverlayKicker.textContent = "Voce narrante";
+    characterOverlayImage.alt = "Cela";
+    characterOverlayKicker.textContent = "Cela";
     characterOverlayTitle.textContent = `Chiusura round | ${result.roundLabel}`;
     characterOverlayCopy.textContent = comment.managerialReading;
 
@@ -1393,8 +1393,8 @@ function renderCharacterOverlay() {
   if (appState.overlay.type === "debrief") {
     overlayPanel?.classList.add("narrator-mode");
     characterOverlayImage.src = "./voce-narrante-clean.png";
-    characterOverlayImage.alt = "Voce narrante";
-    characterOverlayKicker.textContent = "Voce narrante";
+    characterOverlayImage.alt = "Cela";
+    characterOverlayKicker.textContent = "Cela";
     characterOverlayTitle.textContent = "Scopriamo com'è andata?";
     characterOverlayCopy.textContent =
       "I tre round sono chiusi. Ora il gioco esce dalla logica del singolo risultato e apre una lettura più profonda: obiettivi centrati o mancati, prezzo pagato, capacità emerse e traiettorie future delle squadre.";
@@ -1584,7 +1584,7 @@ function getRoundChoiceComment(result) {
   if (marginDelta > 0 && revenueDelta <= 0) focus = "ha privilegiato selettività e tenuta economica";
   if (serviceDelta > 0 && result.after.strategicTime < result.before.strategicTime) focus = "ha protetto il servizio pagando più tempo manageriale";
 
-  return `Nel ${result.roundLabel.toLowerCase()} la squadra ${focus}. La combinazione tra "${result.strategy.label}", "${result.operational.label.toLowerCase()}" e coinvolgimento ${result.sharedInfo ? "ampio" : "selettivo"} ha prodotto il profilo descritto dalla voce narrante.`;
+  return `Nel ${result.roundLabel.toLowerCase()} la squadra ${focus}. La combinazione tra "${result.strategy.label}", "${result.operational.label.toLowerCase()}" e coinvolgimento ${result.sharedInfo ? "ampio" : "selettivo"} ha prodotto il profilo descritto da Cela.`;
 }
 
 function renderFinalPanel() {
