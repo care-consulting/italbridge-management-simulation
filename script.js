@@ -991,9 +991,23 @@ function getFinalNarrative(teamState) {
   let finalProfileLabel = "Coerente e robusta";
   let finalProfileReasonText = "La squadra ha mantenuto buona coerenza con l'obiettivo dichiarato senza rompere l'equilibrio generale del sistema.";
 
-  if (summary.score < 58) {
+  if (summary.score < 45) {
     finalProfileLabel = "Reattiva ma fragile";
-    finalProfileReasonText = "La squadra ha reagito alle pressioni del contesto, ma senza consolidare abbastanza la tenuta del percorso.";
+    finalProfileReasonText = "La squadra ha reagito alle pressioni del contesto, ma senza consolidare abbastanza la tenuta del percorso né tradurre il mandato in un risultato convincente.";
+  } else if (summary.score < 58) {
+    finalProfileLabel = "Esposta e incompleta";
+    finalProfileReasonText = "La direzione del percorso si intravede, ma il risultato resta debole e lascia troppe vulnerabilità aperte rispetto al mandato dichiarato.";
+  } else if (summary.score < 75) {
+    if (hidden.managerialPressure >= 75 || hidden.organizationalTension >= 72 || teamState.visible.strategicTime < 40) {
+      finalProfileLabel = "Parziale e sotto pressione";
+      finalProfileReasonText = "La squadra ha difeso solo una parte del mandato e ha chiuso il percorso con una pressione visibile su tempo, organizzazione o presidio manageriale.";
+    } else if (hidden.foresight >= 75 && hidden.negotiation >= 65) {
+      finalProfileLabel = "Selettiva ma incompleta";
+      finalProfileReasonText = "La squadra ha mostrato buone qualità di lettura e negoziazione, ma non le ha trasformate in un risultato pienamente coerente con l'obiettivo dichiarato.";
+    } else {
+      finalProfileLabel = "Coerente ma incompleta";
+      finalProfileReasonText = "La squadra ha costruito solo una parte del risultato atteso: la direzione è leggibile, ma la chiusura resta parziale rispetto al mandato dichiarato.";
+    }
   } else if (hidden.managerialPressure >= 75 || hidden.organizationalTension >= 72 || teamState.visible.strategicTime < 40) {
     finalProfileLabel = "Coerente ma esposta";
     finalProfileReasonText = "La squadra ha protetto la propria priorità, ma pagando un prezzo visibile su tempo, pressione organizzativa o presidio manageriale.";
@@ -1422,11 +1436,10 @@ function renderCharacterOverlay() {
     characterOverlayImage.src = "./ad-clean.png";
     characterOverlayImage.alt = "Amministratore delegato";
     characterOverlayKicker.textContent = `AD | ${team.name}`;
-    characterOverlayTitle.textContent = `Squadra ${team.name.slice(-1)}, mi avete convinto: il vostro contratto è rinnovato.`;
     const contractCopy = buildContractClosure(teamState);
+    characterOverlayTitle.textContent = `Squadra ${team.name.slice(-1)}, ${contractCopy.title}`;
     const payoff = "Per questa volta...";
-    const mainCopy = contractCopy.replace(payoff, "").trim();
-    characterOverlayCopy.innerHTML = `${mainCopy} <span class="overlay-contract-payoff">${payoff}</span>`;
+    characterOverlayCopy.innerHTML = `${contractCopy.body} <span class="overlay-contract-payoff">${payoff}</span>`;
 
     const actionWrap = document.createElement("div");
     actionWrap.className = "character-overlay-actions-stack";
@@ -1772,15 +1785,43 @@ function buildNarratorEvaluation(teamState, finalData) {
   return `La traiettoria resta intermedia: ${buildFutureTrajectory(teamState, finalData)}`;
 }
 
+function buildPersonalSuggestion(state, finalData) {
+  if (state.hidden.foresight >= state.hidden.negotiation) {
+    if (finalData.summary.score >= 75) {
+      return "Provate a capire come trasformare questa capacità di lettura prospettica in ancora più allineamento interno e continuità esecutiva.";
+    }
+    return "Chiedetevi se state leggendo bene il contesto ma traducendo ancora troppo poco questa lettura in decisioni davvero solide e coerenti.";
+  }
+  if (finalData.summary.score < 58) {
+    return "Chiedetevi dove avete assorbito troppa pressione nel breve e cosa avreste dovuto negoziare meglio per non arrivare così esposti alla fine.";
+  }
+  return "Provate a capire se state mediando bene la pressione oppure se, nel farlo, state ancora rinunciando a costruire più visione sul medio periodo.";
+}
+
 function buildContractClosure(teamState) {
   const summary = computeObjectiveSummary(teamState);
+  if (summary.score >= 95) {
+    return {
+      title: "Mi avete fatto fare una gran figura: il vostro contratto è rinnovato.",
+      body: "Avete portato numeri, controllo e abbastanza lucidità da meritare fiducia senza discussioni. Fired? Non oggi.",
+    };
+  }
   if (summary.score >= 75) {
-    return "Avete dato risultati, tenuta e abbastanza lucidità per meritare fiducia. Per questa volta...";
+    return {
+      title: "Il vostro contratto è rinnovato. Non scambiatelo per routine.",
+      body: "Avete dato un risultato solido e leggibile, anche se non ancora impeccabile. Avete evitato di farmi perdere la pazienza.",
+    };
   }
   if (summary.score >= 58) {
-    return "Non senza riserve, ma avete tenuto la barra abbastanza dritta. Per questa volta...";
+    return {
+      title: "Il contratto è rinnovato. Consideratelo un avvertimento elegante.",
+      body: "Avete tenuto in piedi il sistema, ma lasciando abbastanza aperture da non farmi stare tranquillo. Technically not fired.",
+    };
   }
-  return "Più per prudenza che per entusiasmo, quindi non sprecatelo. Per questa volta...";
+  return {
+    title: "Siete ancora dentro. Non chiedetemi entusiasmo: il contratto è rinnovato.",
+    body: "La tenuta minima c'è stata, ma più per prudenza mia che per vero convincimento. Non abusatene. Fired era sul tavolo.",
+  };
 }
 
 function getTeamDisplayStatus(teamState) {
@@ -1856,8 +1897,11 @@ function renderWorkshopPanel() {
     const bestService = [...finished].sort((a, b) => b.state.visible.serviceLevel - a.state.visible.serviceLevel)[0];
     const bestCash = [...finished].sort((a, b) => b.state.visible.cashFlow - a.state.visible.cashFlow)[0];
     const bestForesight = [...finished].sort((a, b) => b.state.hidden.foresight - a.state.hidden.foresight)[0];
+    const bestRevenue = [...finished].sort((a, b) => b.state.visible.revenue - a.state.visible.revenue)[0];
+    const bestMargin = [...finished].sort((a, b) => b.state.visible.ebitdaMargin - a.state.visible.ebitdaMargin)[0];
+    const bestTime = [...finished].sort((a, b) => b.state.visible.strategicTime - a.state.visible.strategicTime)[0];
 
-    allTeamsSummary.textContent = `${bestScore.team.name} interpreta meglio il mandato dichiarato (${bestScore.summary.score}/100). ${bestService.team.name} difende meglio il servizio (${bestService.state.visible.serviceLevel.toFixed(0)}%). ${bestCash.team.name} chiude con la miglior tenuta di cassa (${bestCash.state.visible.cashFlow.toFixed(1)} M€). La lettura finale va oltre i numeri e tiene insieme risultato, costo pagato e qualità della traiettoria costruita.`;
+    allTeamsSummary.textContent = `${bestScore.team.name} interpreta meglio il mandato dichiarato (${bestScore.summary.score}/100). ${bestService.team.name} difende meglio il servizio (${bestService.state.visible.serviceLevel.toFixed(0)}%). ${bestCash.team.name} chiude con la miglior tenuta di cassa (${bestCash.state.visible.cashFlow.toFixed(1)} M€). Guardate il risultato finale tenendo insieme esito, prezzo pagato e qualità della traiettoria costruita.`;
 
     const step = appState.debriefStep;
     debriefStepLabel.textContent = `Sezione ${step} di 3`;
@@ -1873,7 +1917,7 @@ function renderWorkshopPanel() {
       <div class="final-pill-card">
         <p class="mini-label">Lettura trasversale</p>
         <p class="final-pill-title">Obiettivo centrato meglio</p>
-        <p>${bestScore.team.name} ha il punteggio più alto (${bestScore.summary.score}/100) rispetto al mandato che si era dato all'inizio.</p>
+        <p>${bestScore.team.name} è quella che ha tradotto meglio il proprio mandato in un risultato finale leggibile (${bestScore.summary.score}/100).</p>
       </div>
       <div class="final-pill-card">
         <p class="mini-label">Lettura trasversale</p>
@@ -1913,11 +1957,11 @@ function renderWorkshopPanel() {
       { label: "Obiettivo scelto", cells: finished.map(({ objective }) => objective.name) },
       { label: "Esito rispetto all'obiettivo", cells: finished.map(({ summary, team }) => `<span class="debrief-tag${team.id === bestScore.team.id ? "" : " warning"}">${summary.outcome} (${summary.score}/100)</span>`) },
       { label: "Profilo emerso", cells: finished.map(({ finalData }) => `<span class="debrief-cell-strong">${finalData.finalProfile.label}</span><br>${finalData.finalProfile.reason}`) },
-      { label: "Ricavi", cells: finished.map(({ state }) => `${state.visible.revenue.toFixed(0)} M€`) },
-      { label: "EBITDA %", cells: finished.map(({ state }) => `${state.visible.ebitdaMargin.toFixed(1)}%`) },
+      { label: "Ricavi", cells: finished.map(({ state, team }) => `<span class="${team.id === bestRevenue.team.id ? "debrief-cell-strong" : ""}">${state.visible.revenue.toFixed(0)} M€</span>`) },
+      { label: "EBITDA %", cells: finished.map(({ state, team }) => `<span class="${team.id === bestMargin.team.id ? "debrief-cell-strong" : ""}">${state.visible.ebitdaMargin.toFixed(1)}%</span>`) },
       { label: "Cash Flow", cells: finished.map(({ state, team }) => `<span class="${team.id === bestCash.team.id ? "debrief-cell-strong" : ""}">${state.visible.cashFlow.toFixed(1)} M€</span>`) },
       { label: "Qualità del Servizio", cells: finished.map(({ state, team }) => `<span class="${team.id === bestService.team.id ? "debrief-cell-strong" : ""}">${state.visible.serviceLevel.toFixed(0)}%</span>`) },
-      { label: "Tempo Strategico", cells: finished.map(({ state }) => `${state.visible.strategicTime.toFixed(0)}/100`) },
+      { label: "Tempo Strategico", cells: finished.map(({ state, team }) => `<span class="${team.id === bestTime.team.id ? "debrief-cell-strong" : ""}">${state.visible.strategicTime.toFixed(0)}/100</span>`) },
       { label: "Prezzo pagato più visibile", cells: finished.map(({ state }) => getMostVisiblePricePaid(state)) },
       { label: "Capacità emersa più forte", cells: finished.map(({ state }) => (state.hidden.foresight >= state.hidden.negotiation ? "Foresight" : "Negoziazione")) },
       { label: "Lettura sul mandato", cells: finished.map(({ state }) => buildAdEvaluation(state)) },
@@ -1960,7 +2004,7 @@ function renderWorkshopPanel() {
             <p class="mini-label">${team.name}</p>
             <p><strong>Se questo anno continuasse:</strong></p>
             <p>${buildFutureTrajectory(state, finalData)}</p>
-            <p><strong>Suggerimento:</strong> ${state.hidden.foresight >= state.hidden.negotiation ? "Approfondire come il team costruisce decisioni prospettiche e se riesce a tradurle in maggiore allineamento interno." : "Approfondire come il team media bene la pressione ma rischia di costruire meno visione sul medio periodo."}</p>
+            <p><strong>Suggerimento:</strong> ${buildPersonalSuggestion(state, finalData)}</p>
           </div>
         `,
       )
