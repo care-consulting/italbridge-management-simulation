@@ -62,6 +62,48 @@ def add_title_block(doc, eyebrow, title, subtitle):
     p.paragraph_format.space_after = Pt(12)
 
 
+def add_cover_page(doc, eyebrow, title, subtitle, image_path):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run(eyebrow.upper())
+    r.bold = True
+    r.font.size = Pt(10)
+    r.font.color.rgb = MUTED
+
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run(title)
+    r.font.name = "Aptos Display"
+    r.font.size = Pt(28)
+    r.bold = True
+    r.font.color.rgb = ACCENT
+
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run(subtitle)
+    r.font.size = Pt(12)
+    r.font.color.rgb = RGBColor(18, 25, 36)
+
+    doc.add_paragraph()
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    try:
+        p.add_run().add_picture(image_path, width=Inches(6.3))
+    except Exception:
+        fallback = p.add_run("[Immagine di copertina non disponibile]")
+        fallback.italic = True
+        fallback.font.color.rgb = MUTED
+
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run("4 squadre  |  3 round  |  60 minuti  |  1 anno simulato")
+    r.bold = True
+    r.font.size = Pt(11)
+    r.font.color.rgb = ACCENT
+
+    doc.add_page_break()
+
+
 def add_info_table(doc, rows):
     table = doc.add_table(rows=0, cols=2)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -100,6 +142,13 @@ def build_participant_doc(path):
     doc = Document()
     set_margins(doc)
     base_styles(doc)
+    add_cover_page(
+        doc,
+        "ItalBridge Transport",
+        "Materiale partecipanti",
+        "Business game executive | Trasporti e logistica",
+        "benvenuto.png",
+    )
     add_title_block(
         doc,
         "ItalBridge Transport",
@@ -116,6 +165,30 @@ def build_participant_doc(path):
             ("Mandato della squadra", "........................................................"),
         ],
     )
+
+    doc.add_heading("Il business game", level=1)
+    for text in [
+        "La simulazione riproduce un anno di decisioni in un operatore integrato di trasporti e logistica.",
+        "Ogni squadra parte dallo stesso scenario iniziale, ma affronta il percorso con un mandato riservato assegnato dal facilitatore.",
+        "In ogni round il team prende una decisione strategica, una decisione operativa e una decisione sul coinvolgimento interno del management.",
+    ]:
+        doc.add_paragraph(text, style="List Bullet")
+
+    doc.add_heading("Scenario di partenza", level=1)
+    for text in [
+        "ItalBridge Transport parte con ricavi solidi, ma con marginalità contenuta, cassa sotto pressione e struttura operativa già molto tesa.",
+        "Il mercato resta competitivo, con clienti rilevanti, richieste di flessibilità e costi esterni instabili.",
+        "Durante il game possono entrare eventi straordinari interni ed esterni che modificano priorità, tempi e qualità della risposta manageriale.",
+    ]:
+        doc.add_paragraph(text, style="List Bullet")
+
+    doc.add_heading("Regole del gioco", level=1)
+    for text in [
+        "Discutete nel team e comunicate al facilitatore una scelta per ciascun blocco del round.",
+        "Non esiste una scelta perfetta in assoluto: conta la coerenza tra priorità protetta, costo pagato e robustezza della traiettoria.",
+        "Usate questa scheda solo come supporto di lavoro: annotate ciò che vi aiuta davvero a decidere e a leggere il debrief finale.",
+    ]:
+        doc.add_paragraph(text, style="List Bullet")
 
     doc.add_heading("Uso rapido", level=1)
     for text in [
