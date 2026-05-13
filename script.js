@@ -16,10 +16,10 @@ const GAME_DATA = {
     ],
   },
   teams: [
-    { id: "team-a", name: "Squadra A", note: "Osserva il profilo economico-finanziario e la tenuta della cassa." },
-    { id: "team-b", name: "Squadra B", note: "Osserva la forza commerciale dei clienti principali e le richieste del mercato." },
-    { id: "team-c", name: "Squadra C", note: "Osserva la rete operativa, la capacità residua e il livello di servizio." },
-    { id: "team-d", name: "Squadra D", note: "Osserva il bilanciamento tra priorità del business e pressioni di governance." },
+    { id: "team-a", name: "Squadra A", note: "La squadra parte dallo stesso scenario iniziale e affronterà il percorso con un mandato riservato." },
+    { id: "team-b", name: "Squadra B", note: "La squadra parte dallo stesso scenario iniziale e affronterà il percorso con un mandato riservato." },
+    { id: "team-c", name: "Squadra C", note: "La squadra parte dallo stesso scenario iniziale e affronterà il percorso con un mandato riservato." },
+    { id: "team-d", name: "Squadra D", note: "La squadra parte dallo stesso scenario iniziale e affronterà il percorso con un mandato riservato." },
   ],
   objectives: [
     {
