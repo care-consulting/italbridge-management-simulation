@@ -1271,7 +1271,7 @@ function renderExtraordinarySection(round, selection, extraordinaryEvents) {
           <p class="panel-label">${event.title}</p>
         </div>
         <h2>${event.description}</h2>
-        <p class="comparison-copy">L'intervento dell'AD si apre in overlay. La scelta attuale è: <strong>${selectedOption?.label || "non selezionata"}</strong>.</p>
+        <p class="comparison-copy">L'intervento dell'AD è attivo. La squadra deve chiudere la propria risposta direttamente nell'overlay prima di proseguire.</p>
       `;
       extraEventsContainer.appendChild(wrapper);
       return;
